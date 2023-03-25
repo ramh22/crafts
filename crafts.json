@@ -1,0 +1,66 @@
+{
+ " craft":[  {"id":1,
+"worker":"carpenter",
+"phone":"0909",
+"name":"salama",
+"email":"ssss@gmail.com",
+"city":"fayoum",
+"photo":"877654",
+"description":"i would help you fixing any thing made of wood in your home and i can make tables "},
+{
+    "worker":"painter",
+    "id":2,
+    "phone":"10909",
+    "name":"gom3a",
+    "email":"ggg@gmail.com",
+    "city":"fayoum",
+    "photo":"99877654",
+    "description":"i can color your home"},
+{"id":3,
+    "worker":"builder",
+    "phone":"80909",
+    "name":"mamdouh",
+    "email":"mmm@gmail.com",
+    "city":"fayoum",
+    "photo":"1877654",
+    "description":"i can build homes "
+    }
+,{"id":4,
+"worker":"decoration eng"
+,"phone":"880909",
+"name":"sama",
+"email":"saaaa@gmail.com",
+"city":"fayoum",
+"photo":"12877654",
+"description":"i can decorate homes or offices"
+},
+{
+    "id":5,
+    "worker":"cleaner",
+    "phone":"770909",
+    "name":"so3ad",
+    "email":"s3333@gmail.com",
+    "city":"fayoum",
+    "photo":"455877654",
+    "description":"i can clean homes"
+    },
+    {
+        "id":6,
+        "worker":"electricty",
+        "phone":"090909",
+        "name":"kamel",
+        "email":"kktt@gmail.com",
+        "city":"fayoum",
+        "photo":"767877654",
+        "description":"i can fix your electric devices "
+        },
+        {
+            "id":7,
+            "worker":"sabak",
+            "phone":"780909",
+            "name":"nabil",
+            "email":"nnnn@gmail.com",
+            "city":"fayoum",
+            "photo":"098877654",
+            "description":"i can fix any thing in bathroom or kitechen"}
+        ]}
