@@ -1,2 +1,2 @@
 #Crafts App
-Build using :node.js, mongoDB, mongoose,express
+Built using modern techonlogies : node.js, mongoDB, mongoose,express
