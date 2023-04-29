@@ -1,118 +1,169 @@
 const Order= require('./../models/orderModel');
-
-
-// exports.checkID=(req,res,next,val)=>
-// {
-//     console.log(`tour id is : ${val}`)
-//     if(req.params.id*1>tours.length)
-//     {
-//         return res.status(404).json(
-//             {
-//             status:'fail',
-//             message:'invalid id'
-//             });
-//     }
-//     next();
-// };
-// how middleware works
-// exports.checkBody=((req,res,next)=>{
-//     console.log('name and price of post ');
-//     if(!req.body.name || !req.body.price){
-//         res.status(404).json({status:'fail',message:'no name or no price'});
-//     }
-//      next();
-//  });
-//create order
+const Rating= require('./../models/ratingModel');
+const APIFeatures=require('./../public/apiFeatures');
+const catchAsync=require('./../public/catchAsync');
+const AppError=require('./../public/AppError');
+// create order
+// title , difficulty , description,craft
 exports.createOrder=async(req,res,next)=>{
-    const  newId= orders[orders.lenghth-1].id*1;
-    //const newOrder=Object.assign({id : newId },req.body);
-          orders.push(newOrder);
-   const newOrder=new order.create({
-    title:req.body.title,
-    difficulty:req.body. difficulty,
-    description:req.body.description,
-    photo:req.body.photo,
-   });
-   try{
-   const order =await order.save();
+    try
+    {
+        const {title,orderDifficulty,description}=req.body;
+    const newOrder= await Order.create({
+
+    });
+
     res.status(201).json({
-        status:'success',
-            order: newOrder
-         });//redirect(`/articles/${ article.slug}`)//articles is the view folder
-    }
-    catch(err){//400= bad request  
-        res.status(400).json({
-        status:'faild',
-        message:err
+            status:'success',
+            data:{
+                order:newOrder
+            },
          });
-    }
+   }
+     catch(err){//400= bad request  
+        res.status(400).json({
+         status:'faild',
+         message:'invalid data is sent'
+          });
+     }
     next();
 }
-// call all orders
-exports.getAllOrders=async(req,res)=>{
+// read all orders
+exports.getAllOrders=async(req,res,next)=>{
+    try{
+    const orders= await Order.find();
     res.status(200).json(
         {
         status :'success',
-        result:orders.length,
-            data:
-            {
-                orders:'orders'
-            },
+         result:orders.length,
+             data:
+             {
+                orders
+             },
         });
     }
+    catch(err){
+        res.status(400).json({
+        status:'faild',
+        message: err 
+    });
+    }
+    next();
+    }
 //call one order by id    
-exports.getOneOrder=async(req,res)=>{
-    const id=req.params.id*1;
-    const order=orders.find(el=>el.id===id);
+exports.getOrder=async(req,res,next)=>{
+    try{
+        //const id=req.params.id*1;
+
+     const order= await Order.findById(req.params.id).populate("rating");
     if(!order){
-        res.status(404).json({
-                 status:'fail',
-                message:'invalid id '
-               });}
+        return next(new AppError('no order find with that id',404));
+    }
+    
+    //     res.status(404).json({
+    //              status:'fail',
+    //             message:'invalid id '
+    //            });}
         res.status(200).json({
                      status :'success',
-                     data:
+                      data:
                      {
-                         order
+                          order
                      },
                      });
         }
-// call all orders in a craft on the home bage of worker
-exports.getOrdersOfOneCraft=async(req,res)=>{
-    res.status(200).json(
-                 {
-                 status :'success',
-                 result:orders.length,
-                 data:
-                 {
-                     orders:'orders'
-                 },
-                 });
+
+        catch(err){
+            res.status(400).json({
+            status:'faild',
+            message: err 
+        });}
+        next();
     }
+// call all orders in a craft on the home bage of worker
+
+exports.getAllordersofacraft = catchAsync (async (req, res, next)=> {
+const features = new APIFeatures(Car.find(), req.query)
+.filter()
+.limitFields()
+.sort()
+.paginate();
+const orders = await features.query;
+const populated = await Order.populate(orders,
+{path:"craft",
+select: "name"});
+const CraftOrders = populated.map((order)=>({
+...order.toObject(),
+craft: order.craft,
+}));
+const count = await Order.countDocuments();
+//console,log(count);
+res.status(200).json({
+count,
+results: CraftOrders
+});
+});
+
+        //127.0.0.1:3000/api/orders/sort=craftName
+      // const orderOfACraft=await Order.find(req.body.craftName);
+/*
+     //  exports.getAllCars = catchAsync (async (req, res, next)=>{ ay f
+const features = new APIFeatures(Car.find(), req.query)
+filter ()
+limitFields()
+•sortO
+•paginate();
+const cars = await features.query;
+cost populatedCars = awalt Car.populate(cars,
+path:
+"driver"
+select: "name"
+cost modifiedCars = populatedCar
+...car. toobject(),
+driver: car.driver,
+1)):
+const count = await Car.countDocuments();
+console,log(count);
+res. status (200). json({
+count,
+results: modifiedCars
+1):
+       */
 //update an order
-exports.updateOrder=async(req,res)=>{
-    if(req.params.id*1> orders.length){
-        res.status(404).json({
-                status:'fail',
-                message:' id not found so can not update'
-               });}
+exports.updateOrder=async(req,res,next)=>{
+    try{
+        const order= await Order.findByIdAndUpdate(req.params.id,req.body({
+            new:true,
+            runValidators:true,//validate the update operation agienest model's schema
+        }));
         res.status(200).json({
-                status :'success',
-                data:{
-                    tour:'update order here'
-                    }
-                });
-}
-exports.deleteOrder=async(req,res)=>{
-    if(req.params.id*1> orders.length){
+            status :'success',
+            data:{
+                 order
+                }
+            });}
+    catch(err){
         res.status(404).json({
                 status:'fail',
-                message:' id not found so can not delete'
+                message:err
                });}
+     next();
+}
+exports.deleteOrder=async(req,res,next)=>{
+    
+    try{
+        await Order.findByIdAndDelete(req.params.id);
         res.status(204).json({//204 the data no content
-                status :'success',
-                data:{
-                    tour:null
-                    }
-                });
+            status :'success',
+            data:{
+                order:null
+                }
+            });
+        }
+        catch(err){
+        res.status(404).json({
+                status:'fail',
+                message:err
+               });}
+     next();
 }

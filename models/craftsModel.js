@@ -1,9 +1,10 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 const slugify=require('slugify');
-const validator=require('validator');
-const Order=require('./orderModel');
-//slug -> 'am-i-wrong-fallin-in-love-with-you'
-const craftScehma=new mongoose.Scehma(
+//const validator=require('validator');
+const Order=require('./../models/orderModel');
+const User=require('./../models/userModel');
+
+const craftSchema=new mongoose.Schema(
     {
     name:{
         type:String,
@@ -14,43 +15,35 @@ const craftScehma=new mongoose.Scehma(
          minLength:[3,'more or equal 3 character'],
      
         },
-    image:String,
+    image: {
+          type: String,
+          required: true,
+        },
     slug:String,
-    workers:{
-        name:{
-            type:String,
-            required:[true,'a worker must have a name'],
-            maxLength:[40,'less or equal 40 character'],
-            minLength:[3,'more or equal 3 character'],
-            },
-        phoneNumber:{
-            type:String,
-            required:[true,'a worker must have a phone number'],
-            unique:true,
-           },
-        address:{String},
-        ratingAvg:Number,
-        craft:{
-            type:mongoose.Schema.ObjectID,
-            ref:'Craft',
-            required:[true,'worker must belong to a craft']
-            },
-        photo:String,
-        bio:String,
-
-    },
-    orders:{
-        type:mongoose.Schema.ObjectID,
-        ref:'Order',
-        required:[true,'orders must belong to a craft'],
-        }
-
-
+    workers:Array,
+    orders:Array,
+    // workers:{
+    //     name:{
+    //         type:String,
+    //         required:[true,'a worker must have a name'],
+    //         maxLength:[40,'less or equal 40 character'],
+    //         minLength:[3,'more or equal 3 character'],
+    //         },
+    //     phoneNumber:{
+    //         type:String,
+    //         required:[true,'a worker must have a phone number'],
+    //         unique:true,
+    //        },
+    //     address:{String},
     
-},
+    //     photo:String,
+    
+
+    // },
+    
+  },
     {toJSON:{virtuals:true}},
     {toObject:{virtuals:true}}
     );
-    
-    const Craft = mongoose.model('Craft',craftScehma);
+    const Craft = mongoose.model('Craft',craftSchema);
 module.exports =Craft; 

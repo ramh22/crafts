@@ -2,17 +2,27 @@ const mongoose=require('mongoose');
 const slugify=require('slugify');
 const validator=require('validator');
 
-const reportScehma=new mongoose.Scehma(
+const reportSchema=new mongoose.Schema(
     {
-        type:Array,
-        User: {
-            type:mongoose.Schema.ObjectID,
+        type:[String],
+        WorkerIsReported:Boolean,
+        createAt:{
+            type:Date,
+            defalte:Date.now,
+        },
+        owner: {
+            type:mongoose.Schema.ObjectId,
             ref:'User',
             required:[true,'report must belong to a user']
+        },
+        reported: {
+            type:mongoose.Schema.ObjectId,
+            ref:'User',
+            required:[true,'report must add to a user']
         }
 
     });
 
-reportScehma.index({user:1,user:1},{unique:true});
- const Report = mongoose.model('Report',reportScehma);
+reportSchema.index({user:1,user:1},{unique:true});
+ const Report = mongoose.model('Report',reportSchema);
 module.exports =Report;
