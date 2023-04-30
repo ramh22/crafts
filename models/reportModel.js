@@ -5,7 +5,7 @@ const validator=require('validator');
 const reportSchema=new mongoose.Schema(
     {
         type:[String],
-        WorkerIsReported:Boolean,
+        
         createAt:{
             type:Date,
             defalte:Date.now,

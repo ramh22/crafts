@@ -34,18 +34,16 @@ const userSchema = new mongoose.Schema(
     address:{
       type:String,
       require:true,
+      trim:true,
     },
 
       hasACraft:{
         type:String,
         required:[true,'  user has a craft name if he is a worker ?'],
-        default:null,
-        validate:{
-          validator :function(){
-                if(this.role !=='worker'){
-                return this.hasACraft===null;}
+        
+        
         }
-      },},
+      ,
     // phoneNumber: {
     //   type: String,
          //unique:true,
