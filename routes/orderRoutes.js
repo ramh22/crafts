@@ -1,39 +1,29 @@
-const express=require('express');
-const orderModel = require('./../models/orderModel');
+//import { Router } from 'express';
+//const orderModel = require('./../models/orderModel');
+const express= require('express');
+//const orderModel = require('./../models/orderModel');
 const orderController=require('./../controllers/orderController');
-const mongoose=require('mongoose');
+const authController=require('./../controllers/authController');
+//const mongoose=require('mongoose');
 const router=express.Router();
+ 
+//router.route('/craftName').get(orderController.getAllordersofacraft);
+router
+.route('/:craftId')
+.post(authController.protect,orderController.createOrder);
+router
+.route('/')
+.get(authController.protect,orderController.getAllOrders);
 
-// router.param('id',(req,res,next,val)=>{
-//       console.log(`order id =${val}`);
-//       next();
-// });
-//check body then create
-//router.post(orderController.checkBody,orderController.createOrder);
-// router.param('/',(req,res,next)=>{
-//       const {name,price}=req.body;
-//       if(!req.body.name||!req.body.price){
-//      return res.status(404).json({
-//             status:'fialed'
-//       })}
-//       next();
-// })
-router.
-route('/')
-.get(orderController.getAllOrders)
-.post(orderController.createOrder);
 
 router.
 route('/:id')
-.get(orderController.getOneOrder)
+.get(orderController.getOrder)
 .patch(orderController.updateOrder)
-.delete(orderController.deleteOrder);
-//router.get('/orders/:id',orderController.getOneOrder);
-//router.get('/orders/:craft',orderController.getOrdersOfOneCraft);/
-//router.post('/orders',orderController.createOrder);
-
-// router.patch('/orders/:id',orderController.updateOrder);
-// router.delete('/orders/:id',orderController.deleteOrder);
+.delete(
+      authController.protect,
+      authController.restrictTo('admin','client'),
+      orderController.deleteOrder);
 
 
 //'new articles/new '),{
@@ -91,6 +81,4 @@ route('/:id')
 //                 });
 //             }
 //         }}
-    
-
 module.exports=router;
