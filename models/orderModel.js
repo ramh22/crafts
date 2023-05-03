@@ -25,13 +25,19 @@ const orderSchema=new mongoose.Schema({
     },
     orderDifficulty:{
         type:String,
+        enum:['صيانة بسيطة','صيانة متوسطة','صيانة معقدة'],
+        trim:true,
         required:[true,'an order must have a Difficulty']
     },
     description:{
         type:String,
         trim:true,
     },
-    photo:String,
+    photo:{
+        type:String,
+        avatar:String,
+        cloudinary_id:String,
+        },
     user:{
         type:mongoose.Schema.ObjectId,
         ref:'User',
@@ -51,7 +57,8 @@ const orderSchema=new mongoose.Schema({
         type:Boolean,
         default:false,
     },
-    notDoneNotDeleteOrder:{
+    notDoneNotDeleteOrder://قيد التنفيذ
+    {
         type:Boolean,
         default:true,
         select:false,
@@ -69,10 +76,7 @@ const orderSchema=new mongoose.Schema({
                 
             },
     ],
-    // type:Array,
-    // validate:{
-    //     validator:function (){
-    //     if(!this.orderHavingOffers){
+    
 
         },
  {

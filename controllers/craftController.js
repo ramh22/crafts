@@ -61,7 +61,7 @@ exports.updateCraft=async(req,res,next)=>{
              next();
         } ;
 exports.createCraft = catchAsync(async (req, res) => {
-            const { name } = req.body;
+            const { name ,image} = req.body;
             //craft exists
             const craftFound = await Craft.findOne({ name });
             if (craftFound) {

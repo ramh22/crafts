@@ -1,5 +1,7 @@
 const Order= require('./../models/orderModel');
 const Rating= require('./../models/ratingModel');
+const User= require('./../models/userModel');
+const Craft= require('./../models/craftModel');
 const APIFeatures=require('./../public/apiFeatures');
 const catchAsync=require('./../public/catchAsync');
 const AppError=require('./../public/AppError');
@@ -8,11 +10,21 @@ const AppError=require('./../public/AppError');
 exports.createOrder=async(req,res,next)=>{
     try
     {
-        const {title,orderDifficulty,description}=req.body;
+       const {title,orderDifficulty,description,photo,craft,user}=req.body;
+       const craftFound=await Craft.find({name:craft,});
+       if(!craftFound){
+        return next(new AppError("craft does not exist",401));
+       }
     const newOrder= await Order.create({
-
+      craft,
+      title,
+      orderDifficulty,
+      description,
+      photo,
+      user:req.userAuthId,
     });
-
+    craftFound.orders.push(newOrder._id);//
+    await craftFound.save();
     res.status(201).json({
             status:'success',
             data:{
@@ -54,12 +66,10 @@ exports.getAllOrders=async(req,res,next)=>{
 exports.getOrder=async(req,res,next)=>{
     try{
         //const id=req.params.id*1;
-
      const order= await Order.findById(req.params.id).populate("rating");
     if(!order){
         return next(new AppError('no order find with that id',404));
     }
-    
     //     res.status(404).json({
     //              status:'fail',
     //             message:'invalid id '
@@ -72,7 +82,6 @@ exports.getOrder=async(req,res,next)=>{
                      },
                      });
         }
-
         catch(err){
             res.status(400).json({
             status:'faild',
